@@ -44,9 +44,8 @@ def run_get():
 def run_post():
     text = []
     qq = request.form['input_text']
-    ct = request.form['where']
     if qq != '':
-        result = new_parser(qq, ct)
+        result = new_parser(qq)
         if result != 'Данных нет':
             text.append(result)
         else:

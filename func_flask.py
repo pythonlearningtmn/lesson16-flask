@@ -24,7 +24,7 @@ from pycbrf import ExchangeRates
 from collections import Counter
 
 
-def new_parser(vacancy, city='Москва'):
+def new_parser(vacancy):
     count_vacs = 0
     salar = {'from': [], 'to': []}
     skill = []
@@ -45,35 +45,33 @@ def new_parser(vacancy, city='Москва'):
         par = {'text': vacancy, 'page': page}
         result = requests.get(url, params=par).json()
         for res in result['items']:
-            city_vac = res['area']['name']
-            if city_vac == city:
-                results['count'] += 1
-                url_vac = res['url']
-                res_vac = requests.get(url_vac).json()
+            results['count'] += 1
+            url_vac = res['url']
+            res_vac = requests.get(url_vac).json()
 
-                for skl in res_vac['key_skills']:
-                    skill.append(skl['name'].lower())
+            for skl in res_vac['key_skills']:
+                skill.append(skl['name'].lower())
 
-                if res_vac['salary']:
-                    code = res_vac['salary']['currency']
-                    if rate[code] is None:
-                        code = 'RUR'
-                    if code == 'RUR':
-                        k = 1
-                    else:
-                        k = float(rate[code].value)
-                    if res['salary']['from']:
-                        if (k * res_vac['salary']['from']) < 1000000:
-                            salar['from'].append(k * res_vac['salary']['from'])
-                    else:
-                        if (k * res_vac['salary']['to']) < 1000000:
-                            salar['from'].append(k * res_vac['salary']['to'])
-                    if res['salary']['to']:
-                        if (k * res_vac['salary']['to']) < 1000000:
-                            salar['to'].append(k * res_vac['salary']['to'])
-                    else:
-                        if (k * res_vac['salary']['from']) < 1000000:
-                            salar['to'].append(k * res_vac['salary']['from'])
+            if res_vac['salary']:
+                code = res_vac['salary']['currency']
+                if rate[code] is None:
+                    code = 'RUR'
+                if code == 'RUR':
+                    k = 1
+                else:
+                    k = float(rate[code].value)
+                if res['salary']['from']:
+                    if (k * res_vac['salary']['from']) < 1000000:
+                        salar['from'].append(k * res_vac['salary']['from'])
+                else:
+                    if (k * res_vac['salary']['to']) < 1000000:
+                        salar['from'].append(k * res_vac['salary']['to'])
+                if res['salary']['to']:
+                    if (k * res_vac['salary']['to']) < 1000000:
+                        salar['to'].append(k * res_vac['salary']['to'])
+                else:
+                    if (k * res_vac['salary']['from']) < 1000000:
+                        salar['to'].append(k * res_vac['salary']['from'])
 
     if results['count'] != 0:
         skll = Counter(skill)

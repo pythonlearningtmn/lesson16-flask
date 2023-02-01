@@ -16,23 +16,27 @@
         <div>
             {% if text != 'Результата нет' %}
                 <div class="text-light fs-5 p-3">
-                    Наименование специальности (должности): "{{text[0]['a_workpost']}}"<br>
+                    Наименование специализации (должности): "{{text[0]['a_workpost']}}"<br>
+                    Всего найдено вакансий по специализации --> {{text[0]['count']}}<br>
                     Минимальная средняя заработная плата --> {{text[0]['salary_down']}}<br>
                     Максимальная средняя заработная плата --> {{text[0]['salary_up']}}<br>
-                    Основные требования (навыки) к должности:
+                    <br>
+                    Основные требования (знания и навыки) к специализации:
                 </div>
                 <div class="text-light fs-5 p-4">
                     <table class="table-bordless text-light">
                         <thead>
                             <tr>
                                 <th class="pe-5" scope="col">Наименование навыка</th>
-                                <th scope="col">Потребность</th>
+                                <th class="pe-5" scope="col">Количество</th>
+                                <th scope="col">Процент</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for i in range(10) %}
                                 <tr>
                                     <td class="px-4">{{text[0]['navyki'][i]['a_navyk']}}</td>
+                                    <td class="px-4">{{text[0]['navyki'][i]['count']}}</td>
                                     <td>{{text[0]['navyki'][i]['percent']}}%</td>
                                 </tr>
                             {% endfor %}
