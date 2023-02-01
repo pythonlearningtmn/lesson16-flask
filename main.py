@@ -1,6 +1,7 @@
 import os.path
 import json
 from func_flask import new_parser
+from control_db import add_record
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -48,6 +49,7 @@ def run_post():
         result = new_parser(qq)
         if result != 'Данных нет':
             text.append(result)
+            add_record(result)
         else:
             text = 'Результата нет'
             print(text)
